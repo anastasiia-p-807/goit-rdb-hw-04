@@ -1,0 +1,54 @@
+use mydb;
+
+-- 3
+select * from order_details od
+inner join orders o on od.order_id = o.id
+inner join customers c on o.customer_id = c.id
+inner join employees e on o.employee_id = e.employee_id
+inner join shippers s on o.shipper_id = s.id
+inner join products p on od.product_id = p.id
+inner join categories cat on p.category_id = cat.id
+inner join suppliers sup on p.supplier_id = sup.id;
+
+-- 4.1
+select count(*) as total_rows from order_details od
+inner join orders o on od.order_id = o.id
+inner join customers c on o.customer_id = c.id
+inner join employees e on o.employee_id = e.employee_id
+inner join shippers s on o.shipper_id = s.id
+inner join products p on od.product_id = p.id
+inner join categories cat on p.category_id = cat.id
+inner join suppliers sup on p.supplier_id = sup.id;
+
+-- 4.2
+select count(*) as total_rows_with_left_join
+from order_details od
+inner join orders o on od.order_id = o.id
+left join customers c on o.customer_id = c.id
+inner join employees e on o.employee_id = e.employee_id
+inner join shippers s on o.shipper_id = s.id
+left join products p on od.product_id = p.id
+inner join categories cat on p.category_id = cat.id
+inner join suppliers sup on p.supplier_id = sup.id;
+-- inner join вибирає тільки ті рядки, які мають відповідність у обох таблицях
+-- left join вибирає всі рядки з лівої таблиці та додає null де треба 
+-- тому кількість рядків зазвичай збільшується або залишається такою ж
+
+-- 4.3
+select 
+    cat.name as category_name,
+    count(*) as row_count,
+    avg(od.quantity) as avg_quantity
+from order_details od
+inner join orders o on od.order_id = o.id
+inner join customers c on o.customer_id = c.id
+inner join employees e on o.employee_id = e.employee_id
+inner join shippers s on o.shipper_id = s.id
+inner join products p on od.product_id = p.id
+inner join categories cat on p.category_id = cat.id
+inner join suppliers sup on p.supplier_id = sup.id
+where e.employee_id > 3 and e.employee_id <= 10
+group by cat.name
+having avg(od.quantity) > 21
+order by row_count desc
+limit 4 offset 1;

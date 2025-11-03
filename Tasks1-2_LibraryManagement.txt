@@ -1,0 +1,53 @@
+-- 1
+create database if not exists librarymanagement;
+use librarymanagement;
+
+create table authors (
+    author_id int auto_increment primary key,
+    author_name varchar(255) not null
+);
+
+create table genres (
+    genre_id int auto_increment primary key,
+    genre_name varchar(255) not null
+);
+
+create table books (
+    book_id int auto_increment primary key,
+    title varchar(255) not null,
+    publication_year year,
+    author_id int,
+    genre_id int,
+    foreign key (author_id) references authors(author_id),
+    foreign key (genre_id) references genres(genre_id)
+);
+
+create table users (
+    user_id int auto_increment primary key,
+    username varchar(255) not null,
+    email varchar(255) not null
+);
+
+create table borrowed_books (
+    borrow_id int auto_increment primary key,
+    book_id int,
+    user_id int,
+    borrow_date date,
+    return_date date,
+    foreign key (book_id) references books(book_id),
+    foreign key (user_id) references users(user_id)
+);
+
+-- 2
+insert into authors (author_name) values ('Джоан Роулінг'), ('Джордж Мартін');
+insert into genres (genre_name) values ('Фентезі'), ('Пригоди');
+insert into books (title, publication_year, author_id, genre_id) values 
+('Harry Potter and the Philosopher\'s Stone', 1997, 1, 2),
+('Harry Potter and the Chamber of Secrets', 1998, 1, 2),
+('A Game of Thrones', 1996, 2, 1);
+insert into users (username, email) values ('ana', 'ana@example.com'), ('miha', 'miha@example.com');
+insert into borrowed_books (book_id, user_id, borrow_date, return_date) values 
+(1, 1, '2025-05-01', '2025-07-15'),
+(2, 2, '2025-06-03', null);
+
+
